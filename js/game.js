@@ -4,7 +4,7 @@
  let background;
  let backgroundDos;
  let player;
- let enemy;
+ let enemys = [];
  let cursors;
  let spaceBar;
  let bullet=[];
@@ -40,12 +40,18 @@
    player.setX((SCREEN_WIDTH - player.width * PLAYER_SCALE) / 2);
    player.setY(SCREEN_HEIGHT - (player.height * PLAYER_SCALE) / 2);
    player.setScale(PLAYER_SCALE);
+  
+
  
    // enemy setup
-   enemy = this.add.image(SCREEN_WIDTH / 2, SCREEN_HEIGHT, "enemy");
-   enemy.setX((SCREEN_WIDTH - enemy.width * ENEMY_SCALE) / 2);
+   for(let i = -1 ; i < 4 ; i++){
+   const enemy = this.add.image(SCREEN_WIDTH / 2, SCREEN_HEIGHT, "enemy");
+   enemy.setX((SCREEN_WIDTH - enemy.width * ENEMY_SCALE) / 2 - enemy.width * ENEMY_SCALE + i * enemy.width * ENEMY_SCALE);
    enemy.setY((enemy.height * ENEMY_SCALE) / 2);
    enemy.setScale(ENEMY_SCALE);
+
+   enemys.push(enemy)
+   }
  
    //cursors map into game engine
    cursors = this.input.keyboard.createCursorKeys();
@@ -95,22 +101,21 @@
  }
  
  function colision(bala){
-   if ((bala.x>=enemy.x-(enemy.width * ENEMY_SCALE)/2 && 
-     bala.x<=enemy.x+(enemy.width * ENEMY_SCALE)/2) &&
-     (bala.y>=enemy.y-(enemy.height * ENEMY_SCALE)/2 &&
-     bala.y<=enemy.y+(enemy.height * ENEMY_SCALE)/2)){
+  for(let i = 0; i< enemys.length; i ++){
+   if ((bala.x>=enemys[i].x-(enemys[i].width * ENEMY_SCALE)/2 && 
+     bala.x<=enemys[i].x+(enemys[i].width * ENEMY_SCALE)/2) &&
+     (bala.y>=enemys[i].y-(enemys[i].height * ENEMY_SCALE)/2 &&
+     bala.y<=enemys[i].y+(enemys[i].height * ENEMY_SCALE)/2)){
      if (contador < 0){
        puntuacion()
      }
-     explosion.setPosition(enemy.x, enemy.y);
+     explosion.setPosition(enemys[i].x, enemys[i].y);
      explosion.explode();
-     enemy.setX(Math.floor(Math.random()*(SCREEN_WIDTH - enemy.width)+enemy.width/2));
+     enemys[i].setX(SCREEN_WIDTH - enemys[i].width)+enemys[i].width/2;
      bala.destroy();
      bullet.splice(bullet.indexOf(bala), 1);
-     
-     
-     
    }
+  }
  }
  
  function disparar(engine){
@@ -186,4 +191,9 @@
  
      player.setY(y);
  }
+ };
+
+ function moverEnemy(){
+    let index = 0
+    
  }
