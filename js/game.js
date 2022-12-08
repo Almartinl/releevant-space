@@ -13,6 +13,7 @@
  let contador = -1;
  let score = 0;
  let scoreText;
+ let explosion;
  
  
  
@@ -23,6 +24,7 @@
    this.load.image("sky", "assets/backgrounds/blue.png");
    this.load.image("player", "assets/characters/player.png");
    this.load.image("enemy", "assets/characters/alien1.png");
+   this.load.image("red","assets/particles/red.png")
  }
  
  /**
@@ -54,6 +56,17 @@
    //Texto Score 
    scoreText = this.add.text(5, 5, "Score: "+ score,{
  });
+
+ explosion = this.add.particles("red").createEmitter({
+  scale: { min: 0.5, max: 0 },
+  speed: { min: -100, max: 100 },
+  quantity: 10,
+  frequency: 0.1,
+  lifespan: 200,
+  gravityY: 0,
+  on: false,
+});
+
  }
  
  
@@ -89,8 +102,14 @@
      if (contador < 0){
        puntuacion()
      }
+     explosion.setPosition(enemy.x, enemy.y);
+     explosion.explode();
      enemy.setX(Math.floor(Math.random()*(SCREEN_WIDTH - enemy.width)+enemy.width/2));
      bala.destroy();
+     bullet.splice(bullet.indexOf(bala), 1);
+     
+     
+     
    }
  }
  
@@ -103,14 +122,22 @@
  }
  
  function moverBala(){
-   for (let bala of bullet){
-     bala.setY(bala.y - BULLET_VELOCITY)
-     if (bala.y < 0){ //para q desaparezca la bala por la parte superior
-       bala.destroy()
-     }
-     colision(bala);
+   let bala = 0
+   while(bala < bullet.length){
+    bullet[bala].setY(bullet[bala].y - BULLET_VELOCITY)
+       if (bullet[bala].y < 0){ //para q desaparezca la bala por la parte superior
+        bullet[bala].destroy();
+        bullet.splice(bala, 1)
+      }else{
+      colision(bullet[bala])
+      bala++
+      console.log(bala);
+      }
+    
    }
- }
+   
+   }
+ 
  
  function moverFondo(){
    background.setY(background.y + BACKGROUND_VELOCITY);
