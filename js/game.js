@@ -101,19 +101,24 @@
  }
  
  function colision(bala){
-  for(let i = 0; i< enemys.length; i ++){
-   if ((bala.x>=enemys[i].x-(enemys[i].width * ENEMY_SCALE)/2 && 
-     bala.x<=enemys[i].x+(enemys[i].width * ENEMY_SCALE)/2) &&
-     (bala.y>=enemys[i].y-(enemys[i].height * ENEMY_SCALE)/2 &&
-     bala.y<=enemys[i].y+(enemys[i].height * ENEMY_SCALE)/2)){
+  let index = 0
+  while(index < enemys.length){
+   if ((bala.x>=enemys[index].x-(enemys[index].width * ENEMY_SCALE)/2 && 
+     bala.x<=enemys[index].x+(enemys[index].width * ENEMY_SCALE)/2) &&
+     (bala.y>=enemys[index].y-(enemys[index].height * ENEMY_SCALE)/2 &&
+     bala.y<=enemys[index].y+(enemys[index].height * ENEMY_SCALE)/2)){
      if (contador < 0){
        puntuacion()
      }
-     explosion.setPosition(enemys[i].x, enemys[i].y);
+     explosion.setPosition(enemys[index].x, enemys[index].y);
      explosion.explode();
-     enemys[i].setX(SCREEN_WIDTH - enemys[i].width)+enemys[i].width/2;
+     enemys[index].destroy()
+     enemys.splice(index,1)
      bala.destroy();
      bullet.splice(bullet.indexOf(bala), 1);
+
+   }else{
+    index++
    }
   }
  }
@@ -195,5 +200,8 @@
 
  function moverEnemy(){
     let index = 0
+    while(index < enemys.length){
+      
+    }
     
  }
